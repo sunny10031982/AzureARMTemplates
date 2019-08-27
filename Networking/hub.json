@@ -71,7 +71,7 @@
                         }
                     },
                     {
-                        "name": "[parameters('hubMgmtSubnetName')]",
+                        "name": "[parameters('huDBSubnetName')]",
                         "properties": {
                             "addressPrefix": "[parameters('hubDBSubnetAddressPrefix')]"
                         }
