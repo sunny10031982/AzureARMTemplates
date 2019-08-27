@@ -1,0 +1,101 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "hubName": {
+            "type": "string",
+            "defaultValue": "po-mibi-vnet"
+        },
+        "hubAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.0.0/20"
+        },
+        "hubMgmtSubnetName": {
+            "type": "string",
+            "defaultValue": "mgmt-subnet"
+        },
+        "hubMgmtSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.1.0/24"
+        },
+        "huDBSubnetName": {
+            "type": "string",
+            "defaultValue": "db-subnet"
+        },
+        "hubDBSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.4.0/24"
+        },
+        "hubStorageSubnetName": {
+            "type": "string",
+            "defaultValue": "storage-subnet"
+        },
+        "hubStorageSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.5.0/24"
+        },
+        "hubDBricksPublicSubnetName": {
+            "type": "string",
+            "defaultValue": "databricks-public-subnet"
+        },
+        "hubDBricksPublicSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.2.0/24"
+        },
+        "hubDBricksPrivateSubnetName": {
+            "type": "string",
+            "defaultValue": "databricks-private-subnet"
+        },
+        "hubDBricksPrivateSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.4.0/24"
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2019-06-01",
+            "name": "[parameters('hubName')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('hubAddressPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('hubMgmtSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('hubMgmtSubnetAddressPrefix')]"
+                        }
+                    },
+                    {
+                        "name": "[parameters('hubMgmtSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('hubDBSubnetAddressPrefix')]"
+                        }
+                    },
+                    {
+                        "name": "[parameters('hubStorageSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('hubStorageSubnetAddressPrefix')]"
+                        }
+                    },
+                    {
+                        "name": "[parameters('hubDBricksPublicSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('hubDBricksPublicSubnetAddressPrefix')]"
+                        }
+                    },
+                    {
+                        "name": "[parameters('hubDBricksPrivateSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('hubDBricksPrivateSubnetAddressPrefix')]"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
