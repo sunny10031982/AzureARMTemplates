@@ -101,8 +101,7 @@
                             "delegations": [],
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled"
-                        },
-                        "dependsOn": []
+                        }
                     },
                     {
                         "name": "[parameters('huDBSubnetName')]",
@@ -142,8 +141,7 @@
                             ],
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled"
-                        },
-                        "dependsOn": []
+                        }
                     },
                     {
                         "name": "[parameters('hubStorageSubnetName')]",
@@ -183,8 +181,7 @@
                             ],
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled"
-                        },
-                        "dependsOn": []
+                        }
                     },
                     {
                         "name": "[parameters('hubDBricksPublicSubnetName')]",
@@ -243,8 +240,7 @@
                             "delegations": [],
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled"
-                        },
-                        "dependsOn": []
+                        }
                     }
                 ]
             }
