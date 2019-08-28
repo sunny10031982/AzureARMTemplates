@@ -78,9 +78,6 @@
                         "name": "[parameters('hubMgmtSubnetName')]",
                         "properties": {
                             "addressPrefix": "[parameters('hubMgmtSubnetAddressPrefix')]",
-                            "networkSecurityGroup": {
-                                "id": "[]"
-                            },
                             "serviceEndpoints": [
                                 {
                                     "service": "Microsoft.KeyVault",
@@ -111,9 +108,6 @@
                         "name": "[parameters('huDBSubnetName')]",
                         "properties": {
                             "addressPrefix": "[parameters('hubDBSubnetAddressPrefix')]",
-                            "networkSecurityGroup": {
-                                "id": "[]"
-                            },
                             "serviceEndpoints": [
                                 {
                                     "service": "Microsoft.KeyVault",
@@ -155,9 +149,6 @@
                         "name": "[parameters('hubStorageSubnetName')]",
                         "properties": {
                             "addressPrefix": "[parameters('hubStorageSubnetAddressPrefix')]",
-                            "networkSecurityGroup": {
-                                "id": "[]"
-                            },
                             "serviceEndpoints": [
                                 {
                                     "service": "Microsoft.KeyVault",
@@ -199,9 +190,6 @@
                         "name": "[parameters('hubDBricksPublicSubnetName')]",
                         "properties": {
                             "addressPrefix": "[parameters('hubDBricksPublicSubnetAddressPrefix')]",
-                            "networkSecurityGroup": {
-                                "id": "[]"
-                            },
                             "serviceEndpoints": [
                                 {
                                     "service": "Microsoft.KeyVault",
@@ -232,9 +220,6 @@
                         "name": "[parameters('hubDBricksPrivateSubnetName')]",
                         "properties": {
                             "addressPrefix": "[parameters('hubDBricksPrivateSubnetAddressPrefix')]",
-                            "networkSecurityGroup": {
-                                "id": "[]"
-                            },
                             "serviceEndpoints": [
                                 {
                                     "service": "Microsoft.KeyVault",
