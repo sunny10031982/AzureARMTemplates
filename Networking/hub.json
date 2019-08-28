@@ -81,21 +81,15 @@
                             "serviceEndpoints": [
                                 {
                                     "service": "Microsoft.KeyVault",
-                                    "locations": [
-                                        "uksouth"
-                                    ]
+                                    "locations": [ "[resourceGroup().location]" ]
                                 },
                                 {
                                     "service": "Microsoft.Sql",
-                                    "locations": [
-                                        "uksouth"
-                                    ]
+                                    "locations": [ "[resourceGroup().location]" ]
                                 },
                                 {
                                     "service": "Microsoft.Storage",
-                                    "locations": [
-                                        "uksouth"
-                                    ]
+                                    "locations": [ "[resourceGroup().location]" ]
                                 }
                             ],
                             "privateEndpointNetworkPolicies": "Enabled",
@@ -109,26 +103,20 @@
                             "serviceEndpoints": [
                                 {
                                     "service": "Microsoft.KeyVault",
-                                    "locations": [
-                                        "uksouth"
-                                    ]
+                                    "locations": [ "[resourceGroup().location]" ]
                                 },
                                 {
                                     "service": "Microsoft.Sql",
-                                    "locations": [
-                                        "uksouth"
-                                    ]
+                                    "locations": [ "[resourceGroup().location]" ]
                                 },
                                 {
                                     "service": "Microsoft.Storage",
-                                    "locations": [
-                                        "uksouth"
-                                    ]
+                                    "locations": [ "[resourceGroup().location]" ]
                                 }
                             ],
                             "delegations": [
                                 {
-                                    "name": "[variables('vnet_db_subnet_delegation_name')]",
+                                    "name": "db-db-databricks-delegation",
                                     "properties": {
                                         "serviceName": "Microsoft.Databricks/workspaces",
                                         "actions": [
@@ -149,26 +137,20 @@
                             "serviceEndpoints": [
                                 {
                                     "service": "Microsoft.KeyVault",
-                                    "locations": [
-                                        "uksouth"
-                                    ]
+                                    "locations": [ "[resourceGroup().location]" ]
                                 },
                                 {
                                     "service": "Microsoft.Sql",
-                                    "locations": [
-                                        "uksouth"
-                                    ]
+                                    "locations": [ "[resourceGroup().location]" ]
                                 },
                                 {
                                     "service": "Microsoft.Storage",
-                                    "locations": [
-                                        "uksouth"
-                                    ]
+                                    "locations": [ "[resourceGroup().location]" ]
                                 }
                             ],
                             "delegations": [
                                 {
-                                    "name": "[variables('vnet_storage_subnet_delegation_name')]",
+                                    "name": "db-storage-databricks-delegation",
                                     "properties": {
                                         "serviceName": "Microsoft.Databricks/workspaces",
                                         "actions": [
@@ -189,21 +171,15 @@
                             "serviceEndpoints": [
                                 {
                                     "service": "Microsoft.KeyVault",
-                                    "locations": [
-                                        "uksouth"
-                                    ]
+                                    "locations": [ "[resourceGroup().location]" ]
                                 },
                                 {
                                     "service": "Microsoft.Sql",
-                                    "locations": [
-                                        "uksouth"
-                                    ]
+                                    "locations": [ "[resourceGroup().location]" ]
                                 },
                                 {
                                     "service": "Microsoft.Storage",
-                                    "locations": [
-                                        "uksouth"
-                                    ]
+                                    "locations": [ "[resourceGroup().location]" ]
                                 }
                             ],
                             "privateEndpointNetworkPolicies": "Enabled",
@@ -217,21 +193,15 @@
                             "serviceEndpoints": [
                                 {
                                     "service": "Microsoft.KeyVault",
-                                    "locations": [
-                                        "uksouth"
-                                    ]
+                                    "locations": [ "[resourceGroup().location]" ]
                                 },
                                 {
                                     "service": "Microsoft.Sql",
-                                    "locations": [
-                                        "uksouth"
-                                    ]
+                                    "locations": [ "[resourceGroup().location]" ]
                                 },
                                 {
                                     "service": "Microsoft.Storage",
-                                    "locations": [
-                                        "uksouth"
-                                    ]
+                                    "locations": [ "[resourceGroup().location]" ]
                                 }
                             ],
                             "privateEndpointNetworkPolicies": "Enabled",
