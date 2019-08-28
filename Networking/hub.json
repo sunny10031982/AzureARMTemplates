@@ -49,6 +49,14 @@
         "hubDBricksPrivateSubnetAddressPrefix": {
             "type": "string",
             "defaultValue": "10.0.3.0/24"
+        },
+        "vnet_db_subnet_delegation_name": {
+            "defaultValue": "db-subnet-databricks-delegation",
+            "type": "string"
+        },
+        "vnet_storage_subnet_delegation_name": {
+            "defaultValue": "db-storage-databricks-delegation",
+            "type": "string"
         }
     },
     "variables": {
@@ -116,7 +124,7 @@
                             ],
                             "delegations": [
                                 {
-                                    "name": "db-db-databricks-delegation",
+                                    "name": "[parameters('vnet_db_subnet_delegation_name')]",
                                     "properties": {
                                         "serviceName": "Microsoft.Databricks/workspaces",
                                         "actions": [
@@ -150,7 +158,7 @@
                             ],
                             "delegations": [
                                 {
-                                    "name": "db-storage-databricks-delegation",
+                                    "name": "[parameters('vnet_storage_subnet_delegation_name')]",
                                     "properties": {
                                         "serviceName": "Microsoft.Databricks/workspaces",
                                         "actions": [
