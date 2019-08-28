@@ -52,7 +52,7 @@
     },
     "variables": {
         "nsgId": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('vnet_mgmt_jumpbox_nsg'))]",
-        "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets123', parameters('hubName'), parameters('hubMgmtSubnetName'))]"
+        "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), parameters('hubMgmtSubnetName'))]"
     },
     "resources": [
         {
