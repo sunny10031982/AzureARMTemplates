@@ -24,6 +24,10 @@
         "sql_serverName": {
             "defaultValue": "mibiodssqlserver",
             "type": "string"
+        },
+        "sql_enableVA": {
+            "defaultValue": false,
+            "type": "bool"
         }
     },
     "variables": {
@@ -33,8 +37,7 @@
         "uniqueStorage": "[uniqueString(variables('subscriptionId'), variables('resourceGroupName'), variables('sql_location'))]",
         "storageName": "[tolower(concat('sqlva', variables('uniqueStorage')))]",
         "sql_maxSizeBytes": "268435456000",
-        "sql_collation": "SQL_Latin1_General_CP1_CI_AS",
-        "enableVA": false
+        "sql_collation": "SQL_Latin1_General_CP1_CI_AS"
     },
     "resources": [
         {
@@ -113,13 +116,13 @@
                     }
                 },
                 {
-                    "condition": "[variables('enableVA')]",
+                    "condition": "[parameters('sql_enableVA')]",
                     "apiVersion": "2018-06-01-preview",
                     "type": "vulnerabilityAssessments",
                     "name": "Default",
                     "properties": {
-                        "storageContainerPath": "[if(variables('enableVA'), concat(reference(variables('storageName'), '2018-02-01').primaryEndpoints.blob, 'vulnerability-assessment'), '')]",
-                        "storageAccountAccessKey": "[if(variables('enableVA'), listKeys(variables('storageName'), '2018-02-01').keys[0].value, '')]",
+                        "storageContainerPath": "[if(parameters('sql_enableVA'), concat(reference(variables('storageName'), '2018-02-01').primaryEndpoints.blob, 'vulnerability-assessment'), '')]",
+                        "storageAccountAccessKey": "[if(parameters('sql_enableVA'), listKeys(variables('storageName'), '2018-02-01').keys[0].value, '')]",
                         "recurringScans": {
                             "isEnabled": true,
                             "emailSubscriptionAdmins": true,
