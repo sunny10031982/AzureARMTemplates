@@ -1,0 +1,159 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vm_networkInterfaceName": {
+            "defaultValue": "mgmt-jump-box-ni",
+            "type": "string"
+        },
+        "vm_networkSecurityGroupName": {
+            "defaultValue": "mgmt-jump-box-nsg",
+            "type": "string"
+        },
+        "virtualMachineName": {
+            "defaultValue": "mgmt-jump-box",
+            "type": "string"
+        },
+        "hubMgmtSubnetName": {
+            "type": "string",
+            "defaultValue": "jump-mgmt-subnet"
+        },
+        "adminUsername": {
+            "defaultValue": "mibi-pofadmin",
+            "type": "string"
+        },
+        "adminPassword": {
+            "type": "secureString"
+        },
+        "vnet_mgmt_jumpbox_nsg": {
+            "defaultValue": "mgmt-jump-box-nsg",
+            "type": "string"
+        },
+        "hubName": {
+            "type": "string",
+            "defaultValue": "po-mibi-vnet"
+        },
+        "vmJumpBoxPublicIP": {
+            "type": "string",
+            "defaultValue": "POMIBI-PublicIP"
+        },
+        "publicIpAddressType": {
+            "type": "string",
+            "defaultValue": "Dynamic"
+        },
+        "virtualMachineSize": {
+            "type": "string",
+            "defaultValue": "Standard_D2_v3"
+        },
+        "vm_osDiskType": {
+            "type": "string",
+            "defaultValue": "StandardSSD_LRS"
+        }
+    },
+    "variables": {
+        "nsgId": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('vnet_mgmt_jumpbox_nsg'))]",
+        "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), variables('hubMgmtSubnetName'))]"
+    },
+    "resources": [
+        {
+            "name": "[parameters('vm_networkInterfaceName')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2018-10-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/publicIpAddresses/', parameters('vmJumpBoxPublicIP'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "subnet": {
+                                "id": "[variables('subnetRef')]"
+                            },
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIpAddress": {
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', parameters('vmJumpBoxPublicIP'))]"
+                            }
+                        }
+                    }
+                ],
+                "networkSecurityGroup": {
+                    "id": "[variables('nsgId')]"
+                }
+            },
+            "tags": {
+                "MIBI_Jump_Box": "mgmt-jump-box"
+            }
+        },
+        {
+            "name": "[parameters('vmJumpBoxPublicIP')]",
+            "type": "Microsoft.Network/publicIpAddresses",
+            "apiVersion": "2019-02-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "publicIpAllocationMethod": "[parameters('publicIpAddressType')]"
+            },
+            "sku": {
+                "name": "Basic",
+                "tier": "Regional"
+            },
+            "tags": {
+                "MIBI_Jump_Box": "mgmt-jump-box"
+            }
+        },
+        {
+            "name": "[parameters('virtualMachineName')]",
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2019-03-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', parameters('vm_networkInterfaceName'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('virtualMachineSize')]"
+                },
+                "storageProfile": {
+                    "osDisk": {
+                        "createOption": "fromImage",
+                        "managedDisk": {
+                            "storageAccountType": "[parameters('vm_osDiskType')]"
+                        }
+                    },
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2019-Datacenter",
+                        "version": "latest"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('vm_networkInterfaceName'))]"
+                        }
+                    ]
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachineName')]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]",
+                    "windowsConfiguration": {
+                        "enableAutomaticUpdates": true,
+                        "provisionVmAgent": true
+                    }
+                }
+            },
+            "tags": {
+                "MIBI_Jump_Box": "mgmt-jump-box"
+            }
+        }
+    ],
+    "outputs": {
+        "adminUsername": {
+            "type": "string",
+            "value": "[parameters('adminUsername')]"
+        }
+    }
+}
