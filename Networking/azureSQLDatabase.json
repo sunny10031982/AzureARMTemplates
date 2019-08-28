@@ -113,13 +113,13 @@
                     }
                 },
                 {
-                    "condition": "[parameters('enableVA')]",
+                    "condition": "[variables('enableVA')]",
                     "apiVersion": "2018-06-01-preview",
                     "type": "vulnerabilityAssessments",
                     "name": "Default",
                     "properties": {
-                        "storageContainerPath": "[if(parameters('enableVA'), concat(reference(variables('storageName'), '2018-02-01').primaryEndpoints.blob, 'vulnerability-assessment'), '')]",
-                        "storageAccountAccessKey": "[if(parameters('enableVA'), listKeys(variables('storageName'), '2018-02-01').keys[0].value, '')]",
+                        "storageContainerPath": "[if(variables('enableVA'), concat(reference(variables('storageName'), '2018-02-01').primaryEndpoints.blob, 'vulnerability-assessment'), '')]",
+                        "storageAccountAccessKey": "[if(variables('enableVA'), listKeys(variables('storageName'), '2018-02-01').keys[0].value, '')]",
                         "recurringScans": {
                             "isEnabled": true,
                             "emailSubscriptionAdmins": true,
