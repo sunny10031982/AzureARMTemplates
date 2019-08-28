@@ -1,0 +1,51 @@
+﻿{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "df_name": {
+            "type": "string",
+            "defaultValue": "mibi-data-factory"
+        },
+        "df_gitAccountName": {
+            "type": "string",
+            "defaultValue": "PnOFerries"
+        },
+        "df_gitRepositoryName": {
+            "type": "string",
+            "defaultValue": "PnOFerries"
+        },
+        "df_gitBranchName": {
+            "type": "string",
+            "defaultValue": "master"
+        },
+        "df_gitRootFolder": {
+            "type": "string",
+            "defaultValue": "/data-factory"
+        },
+        "df_gitProjectName": {
+            "type": "string",
+            "defaultValue": "PO-MIBIDataLandscape"
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-06-01",
+            "name": "[parameters('df_name')]",
+            "location": "[resourceGroup().location]",
+            "type": "Microsoft.DataFactory/factories",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "repoConfiguration": {
+                    "type": "FactoryVSTSConfiguration",
+                    "accountName": "[parameters('df_gitAccountName')]",
+                    "repositoryName": "[parameters('df_gitRepositoryName')]",
+                    "collaborationBranch": "[parameters('df_gitBranchName')]",
+                    "rootFolder": "[parameters('df_gitRootFolder')]",
+                    "projectName": "[parameters('df_gitProjectName')]"
+                }
+            }
+        }
+    ]
+}
