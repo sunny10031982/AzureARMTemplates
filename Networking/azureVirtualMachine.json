@@ -62,7 +62,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[concat('Microsoft.Network/publicIpAddresses/', parameters('vmJumpBoxPublicIP'))]",
-                "[concat('Microsoft.Network/virtualNetworks/subnets', parameters('hubName'),parameters('hubMgmtSubnetName'))]"
+                "[concat('Microsoft.Network/virtualNetworks/subnets/', parameters('hubName'),'/'parameters('hubMgmtSubnetName'))]"
             ],
             "properties": {
                 "ipConfigurations": [
