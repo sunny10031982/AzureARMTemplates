@@ -120,9 +120,6 @@
                         "name": "[parameters('huDBSubnetName')]",
                         "properties": {
                             "addressPrefix": "[parameters('hubDBSubnetAddressPrefix')]",
-                            "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('vnet_db_nsg'))]"
-                            },
                             "serviceEndpoints": [
                                 {
                                     "service": "Microsoft.KeyVault",
