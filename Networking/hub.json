@@ -60,14 +60,7 @@
         }
     },
     "variables": {
-        "vnet_db_subnet_delegation_name": {
-            "defaultValue": "db-subnet-databricks-delegation",
-            "type": "string"
-        },
-        "vnet_storage_subnet_delegation_name": {
-            "defaultValue": "db-storage-databricks-delegation",
-            "type": "string"
-        }
+
     },
     "resources": [
         {
