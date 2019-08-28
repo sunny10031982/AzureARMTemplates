@@ -1,0 +1,156 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "blobStorageAccName": {
+            "type": "string",
+            "defaultValue": "mibiblobstorage"
+        },
+        "dataLakeStorageAccName": {
+            "type": "string",
+            "defaultValue": "mibiadlsgen2"
+        },
+        "hubName": {
+            "type": "string",
+            "defaultValue": "po-mibi-vnet"
+        },
+        "hubMgmtSubnetName": {
+            "type": "string",
+            "defaultValue": "jump-mgmt-subnet"
+        },
+        "huDBSubnetName": {
+            "type": "string",
+            "defaultValue": "db-subnet"
+        },
+        "hubStorageSubnetName": {
+            "type": "string",
+            "defaultValue": "storage-subnet"
+        },
+        "hubDBricksPublicSubnetName": {
+            "type": "string",
+            "defaultValue": "databricks-public-subnet"
+        },
+        "hubDBricksPrivateSubnetName": {
+            "type": "string",
+            "defaultValue": "databricks-private-subnet"
+        }
+    },
+    "variables": {
+        "subscriptionId": "[subscription().subscriptionId]",
+        "resourceGroupName": "[resourceGroup().name]",
+        "ipRuleVnet": "[concat('/subscriptions/', variables('subscriptionId'),'/resourceGroups/',variables('resourceGroupName'),'/providers/Microsoft.Network/virtualNetworks/',parameters('hubName'))]"
+    },
+    "resources": [
+        {
+            "name": "[parameters('blobStorageAccName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-04-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "accessTier": "Hot",
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "enabled": true
+                        },
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "defaultAction": "Allow",
+                    "ipRules": [],
+                    "virtualNetworkRules": [
+                        {
+                            "id": "[concat(variables('ipRuleVnet'), '/subnets/',parameters('hubMgmtSubnetName'))]",
+                            "action": "Allow"
+                        },
+                        {
+                            "id": "[concat(variables('ipRuleVnet'), '/subnets/',parameters('huDBSubnetName'))]",
+                            "action": "Allow"
+                        },
+                        {
+                            "id": "[concat(variables('ipRuleVnet'), '/subnets/',parameters('hubStorageSubnetName'))]",
+                            "action": "Allow"
+                        },
+                        {
+                            "id": "[concat(variables('ipRuleVnet'), '/subnets/',parameters('hubDBricksPublicSubnetName'))]",
+                            "action": "Allow"
+                        },
+                        {
+                            "id": "[concat(variables('ipRuleVnet'), '/subnets/',parameters('hubDBricksPrivateSubnetName'))]",
+                            "action": "Allow"
+                        }
+
+                    ]
+                }
+            },
+            "dependsOn": [],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "tags": {
+                "MIBI_Blobstorage": "mibiblobstorage"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices",
+            "apiVersion": "2019-04-01",
+            "name": "[concat(parameters('blobStorageAccName'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('blobStorageAccName'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                },
+                "deleteRetentionPolicy": {
+                    "enabled": false
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2019-04-01",
+            "name": "[concat(parameters('blobStorageAccName'), '/default/customers')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('blobStorageAccName'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('blobStorageAccName'))]"
+            ],
+            "properties": {
+                "publicAccess": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2019-04-01",
+            "name": "[concat(parameters('blobStorageAccName'), '/default/notifications')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('blobStorageAccName'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('blobStorageAccName'))]"
+            ],
+            "properties": {
+                "publicAccess": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2019-04-01",
+            "name": "[concat(parameters('blobStorageAccName'), '/default/salesorders')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('blobStorageAccName'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('blobStorageAccName'))]"
+            ],
+            "properties": {
+                "publicAccess": "None"
+            }
+        }
+    ],
+    "outputs": {}
+}
