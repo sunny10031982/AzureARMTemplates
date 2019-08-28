@@ -1,254 +1,245 @@
-{  
-   "$schema":"http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-   "contentVersion":"1.0.0.0",
-   "parameters":{  
-      "hubName":{  
-         "type":"string",
-         "defaultValue":"po-mibi-vnet"
-      },
-      "hubAddressPrefix":{  
-         "type":"string",
-         "defaultValue":"10.0.0.0/20"
-      },
-      "hubMgmtSubnetName":{  
-         "type":"string",
-         "defaultValue":"jump-mgmt-subnet"
-      },
-      "hubMgmtSubnetAddressPrefix":{  
-         "type":"string",
-         "defaultValue":"10.0.1.0/24"
-      },
-      "huDBSubnetName":{  
-         "type":"string",
-         "defaultValue":"db-subnet"
-      },
-      "hubDBSubnetAddressPrefix":{  
-         "type":"string",
-         "defaultValue":"10.0.4.0/24"
-      },
-      "hubStorageSubnetName":{  
-         "type":"string",
-         "defaultValue":"storage-subnet"
-      },
-      "hubStorageSubnetAddressPrefix":{  
-         "type":"string",
-         "defaultValue":"10.0.5.0/24"
-      },
-      "hubDBricksPublicSubnetName":{  
-         "type":"string",
-         "defaultValue":"databricks-public-subnet"
-      },
-      "hubDBricksPublicSubnetAddressPrefix":{  
-         "type":"string",
-         "defaultValue":"10.0.2.0/24"
-      },
-      "hubDBricksPrivateSubnetName":{  
-         "type":"string",
-         "defaultValue":"databricks-private-subnet"
-      },
-      "hubDBricksPrivateSubnetAddressPrefix":{  
-         "type":"string",
-         "defaultValue":"10.0.3.0/24"
-      }
-   },
-   "variables":{  
-      "vnet_db_subnet_delegation_name":{  
-         "defaultValue":"db-subnet-databricks-delegation",
-         "type":"string"
-      },
-      "vnet_storage_subnet_delegation_name":{  
-         "defaultValue":"db-storage-databricks-delegation",
-         "type":"string"
-      }
-   },
-   "resources":[  
-      {  
-         "apiVersion":"2019-06-01",
-         "name":"[parameters('hubName')]",
-         "type":"Microsoft.Network/virtualNetworks",
-         "location":"[resourceGroup().location]",
-         "properties":{  
-            "addressSpace":{  
-               "addressPrefixes":[  
-                  "[parameters('hubAddressPrefix')]"
-               ]
-            },
-            "subnets":[  
-               {  
-                  "name":"[parameters('hubMgmtSubnetName')]",
-                  "properties":{  
-                     "addressPrefix":"[parameters('hubMgmtSubnetAddressPrefix')]",
-                     "serviceEndpoints":[  
-                        {  
-                           "service":"Microsoft.KeyVault",
-                           "locations":[  
-                              "uksouth"
-                           ]
-                        },
-                        {  
-                           "service":"Microsoft.Sql",
-                           "locations":[  
-                              "uksouth"
-                           ]
-                        },
-                        {  
-                           "service":"Microsoft.Storage",
-                           "locations":[  
-                              "uksouth"
-                           ]
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "hubName": {
+            "type": "string",
+            "defaultValue": "po-mibi-vnet"
+        },
+        "hubAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.0.0/20"
+        },
+        "hubMgmtSubnetName": {
+            "type": "string",
+            "defaultValue": "jump-mgmt-subnet"
+        },
+        "hubMgmtSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.1.0/24"
+        },
+        "huDBSubnetName": {
+            "type": "string",
+            "defaultValue": "db-subnet"
+        },
+        "hubDBSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.4.0/24"
+        },
+        "hubStorageSubnetName": {
+            "type": "string",
+            "defaultValue": "storage-subnet"
+        },
+        "hubStorageSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.5.0/24"
+        },
+        "hubDBricksPublicSubnetName": {
+            "type": "string",
+            "defaultValue": "databricks-public-subnet"
+        },
+        "hubDBricksPublicSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.2.0/24"
+        },
+        "hubDBricksPrivateSubnetName": {
+            "type": "string",
+            "defaultValue": "databricks-private-subnet"
+        },
+        "hubDBricksPrivateSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.3.0/24"
+        }
+    },
+    "variables": {
+        "vnet_db_subnet_delegation_name": {
+            "defaultValue": "db-subnet-databricks-delegation",
+            "type": "string"
+        },
+        "vnet_storage_subnet_delegation_name": {
+            "defaultValue": "db-storage-databricks-delegation",
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2019-06-01",
+            "name": "[parameters('hubName')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('hubAddressPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('hubMgmtSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('hubMgmtSubnetAddressPrefix')]",
+                            "serviceEndpoints": [
+                                {
+                                    "service": "Microsoft.KeyVault",
+                                    "locations": [
+                                        "uksouth"
+                                    ]
+                                },
+                                {
+                                    "service": "Microsoft.Sql",
+                                    "locations": [
+                                        "uksouth"
+                                    ]
+                                },
+                                {
+                                    "service": "Microsoft.Storage",
+                                    "locations": [
+                                        "uksouth"
+                                    ]
+                                }
+                            ],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
                         }
-                     ],
-                     "delegations":[  
-
-                     ],
-                     "privateEndpointNetworkPolicies":"Enabled",
-                     "privateLinkServiceNetworkPolicies":"Enabled"
-                  }
-               },
-               {  
-                  "name":"[parameters('huDBSubnetName')]",
-                  "properties":{  
-                     "addressPrefix":"[parameters('hubDBSubnetAddressPrefix')]",
-                     "serviceEndpoints":[  
-                        {  
-                           "service":"Microsoft.KeyVault",
-                           "locations":[  
-                              "uksouth"
-                           ]
-                        },
-                        {  
-                           "service":"Microsoft.Sql",
-                           "locations":[  
-                              "uksouth"
-                           ]
-                        },
-                        {  
-                           "service":"Microsoft.Storage",
-                           "locations":[  
-                              "uksouth"
-                           ]
+                    },
+                    {
+                        "name": "[parameters('huDBSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('hubDBSubnetAddressPrefix')]",
+                            "serviceEndpoints": [
+                                {
+                                    "service": "Microsoft.KeyVault",
+                                    "locations": [
+                                        "uksouth"
+                                    ]
+                                },
+                                {
+                                    "service": "Microsoft.Sql",
+                                    "locations": [
+                                        "uksouth"
+                                    ]
+                                },
+                                {
+                                    "service": "Microsoft.Storage",
+                                    "locations": [
+                                        "uksouth"
+                                    ]
+                                }
+                            ],
+                            "delegations": [
+                                {
+                                    "name": "[variables('vnet_db_subnet_delegation_name')]",
+                                    "properties": {
+                                        "serviceName": "Microsoft.Databricks/workspaces",
+                                        "actions": [
+                                            "Microsoft.Network/virtualNetworks/subnets/join/action",
+                                            "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action"
+                                        ]
+                                    }
+                                }
+                            ],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
                         }
-                     ],
-                     "delegations":[  
-                        {  
-                           "name":"[variables('vnet_db_subnet_delegation_name')]",
-                           "properties":{  
-                              "serviceName":"Microsoft.Databricks/workspaces",
-                              "actions":[  
-                                 "Microsoft.Network/virtualNetworks/subnets/join/action",
-                                 "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action"
-                              ]
-                           }
+                    },
+                    {
+                        "name": "[parameters('hubStorageSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('hubStorageSubnetAddressPrefix')]",
+                            "serviceEndpoints": [
+                                {
+                                    "service": "Microsoft.KeyVault",
+                                    "locations": [
+                                        "uksouth"
+                                    ]
+                                },
+                                {
+                                    "service": "Microsoft.Sql",
+                                    "locations": [
+                                        "uksouth"
+                                    ]
+                                },
+                                {
+                                    "service": "Microsoft.Storage",
+                                    "locations": [
+                                        "uksouth"
+                                    ]
+                                }
+                            ],
+                            "delegations": [
+                                {
+                                    "name": "[variables('vnet_storage_subnet_delegation_name')]",
+                                    "properties": {
+                                        "serviceName": "Microsoft.Databricks/workspaces",
+                                        "actions": [
+                                            "Microsoft.Network/virtualNetworks/subnets/join/action",
+                                            "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action"
+                                        ]
+                                    }
+                                }
+                            ],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
                         }
-                     ],
-                     "privateEndpointNetworkPolicies":"Enabled",
-                     "privateLinkServiceNetworkPolicies":"Enabled"
-                  }
-               },
-               {  
-                  "name":"[parameters('hubStorageSubnetName')]",
-                  "properties":{  
-                     "addressPrefix":"[parameters('hubStorageSubnetAddressPrefix')]",
-                     "serviceEndpoints":[  
-                        {  
-                           "service":"Microsoft.KeyVault",
-                           "locations":[  
-                              "uksouth"
-                           ]
-                        },
-                        {  
-                           "service":"Microsoft.Sql",
-                           "locations":[  
-                              "uksouth"
-                           ]
-                        },
-                        {  
-                           "service":"Microsoft.Storage",
-                           "locations":[  
-                              "uksouth"
-                           ]
+                    },
+                    {
+                        "name": "[parameters('hubDBricksPublicSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('hubDBricksPublicSubnetAddressPrefix')]",
+                            "serviceEndpoints": [
+                                {
+                                    "service": "Microsoft.KeyVault",
+                                    "locations": [
+                                        "uksouth"
+                                    ]
+                                },
+                                {
+                                    "service": "Microsoft.Sql",
+                                    "locations": [
+                                        "uksouth"
+                                    ]
+                                },
+                                {
+                                    "service": "Microsoft.Storage",
+                                    "locations": [
+                                        "uksouth"
+                                    ]
+                                }
+                            ],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
                         }
-                     ],
-                     "delegations":[  
-                        {  
-                           "name":"[variables('vnet_storage_subnet_delegation_name')]",
-                           "properties":{  
-                              "serviceName":"Microsoft.Databricks/workspaces",
-                              "actions":[  
-                                 "Microsoft.Network/virtualNetworks/subnets/join/action",
-                                 "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action"
-                              ]
-                           }
+                    },
+                    {
+                        "name": "[parameters('hubDBricksPrivateSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('hubDBricksPrivateSubnetAddressPrefix')]",
+                            "serviceEndpoints": [
+                                {
+                                    "service": "Microsoft.KeyVault",
+                                    "locations": [
+                                        "uksouth"
+                                    ]
+                                },
+                                {
+                                    "service": "Microsoft.Sql",
+                                    "locations": [
+                                        "uksouth"
+                                    ]
+                                },
+                                {
+                                    "service": "Microsoft.Storage",
+                                    "locations": [
+                                        "uksouth"
+                                    ]
+                                }
+                            ],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
                         }
-                     ],
-                     "privateEndpointNetworkPolicies":"Enabled",
-                     "privateLinkServiceNetworkPolicies":"Enabled"
-                  }
-               },
-               {  
-                  "name":"[parameters('hubDBricksPublicSubnetName')]",
-                  "properties":{  
-                     "addressPrefix":"[parameters('hubDBricksPublicSubnetAddressPrefix')]",
-                     "serviceEndpoints":[  
-                        {  
-                           "service":"Microsoft.KeyVault",
-                           "locations":[  
-                              "uksouth"
-                           ]
-                        },
-                        {  
-                           "service":"Microsoft.Sql",
-                           "locations":[  
-                              "uksouth"
-                           ]
-                        },
-                        {  
-                           "service":"Microsoft.Storage",
-                           "locations":[  
-                              "uksouth"
-                           ]
-                        }
-                     ],
-                     "delegations":[  
-
-                     ],
-                     "privateEndpointNetworkPolicies":"Enabled",
-                     "privateLinkServiceNetworkPolicies":"Enabled"
-                  }
-               },
-               {  
-                  "name":"[parameters('hubDBricksPrivateSubnetName')]",
-                  "properties":{  
-                     "addressPrefix":"[parameters('hubDBricksPrivateSubnetAddressPrefix')]",
-                     "serviceEndpoints":[  
-                        {  
-                           "service":"Microsoft.KeyVault",
-                           "locations":[  
-                              "uksouth"
-                           ]
-                        },
-                        {  
-                           "service":"Microsoft.Sql",
-                           "locations":[  
-                              "uksouth"
-                           ]
-                        },
-                        {  
-                           "service":"Microsoft.Storage",
-                           "locations":[  
-                              "uksouth"
-                           ]
-                        }
-                     ],
-                     "delegations":[  
-
-                     ],
-                     "privateEndpointNetworkPolicies":"Enabled",
-                     "privateLinkServiceNetworkPolicies":"Enabled"
-                  }
-               }
-            ]
-         }
-      }
-   ]
+                    }
+                ]
+            }
+        }
+    ]
 }
