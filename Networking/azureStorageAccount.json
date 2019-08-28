@@ -89,7 +89,6 @@
                     ]
                 }
             },
-            "dependsOn": [],
             "sku": {
                 "name": "Standard_LRS",
                 "tier": "Standard"
