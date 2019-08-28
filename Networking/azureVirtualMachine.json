@@ -43,7 +43,7 @@
         },
         "virtualMachineSize": {
             "type": "string",
-            "defaultValue": "Standard_D2_v3"
+            "defaultValue": "Standard_DS1_v2"
         },
         "vm_osDiskType": {
             "type": "string",
@@ -61,7 +61,8 @@
             "apiVersion": "2018-10-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Network/publicIpAddresses/', parameters('vmJumpBoxPublicIP'))]"
+                "[concat('Microsoft.Network/publicIpAddresses/', parameters('vmJumpBoxPublicIP'))]",
+                "[concat('Microsoft.Network/virtualNetworks/subnets', parameters('hubName'),parameters('hubMgmtSubnetName'))]"
             ],
             "properties": {
                 "ipConfigurations": [
