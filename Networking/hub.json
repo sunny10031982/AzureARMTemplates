@@ -57,6 +57,22 @@
         "vnet_storage_subnet_delegation_name": {
             "defaultValue": "db-storage-databricks-delegation",
             "type": "string"
+        },
+        "vnet_db_nsg": {
+            "defaultValue": "db-nsg",
+            "type": "string"
+        },
+        "vnet_databricks_nsg": {
+            "defaultValue": "databricks-nsg",
+            "type": "string"
+        },
+        "vnet_storage_nsg": {
+            "defaultValue": "storage-nsg",
+            "type": "string"
+        },
+        "vnet_mgmt_jumpbox_nsg": {
+            "defaultValue": "mgmt-jump-box-nsg",
+            "type": "string"
         }
     },
     "variables": {
@@ -79,6 +95,9 @@
                         "name": "[parameters('hubMgmtSubnetName')]",
                         "properties": {
                             "addressPrefix": "[parameters('hubMgmtSubnetAddressPrefix')]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('vnet_mgmt_jumpbox_nsg'))]"
+                            },
                             "serviceEndpoints": [
                                 {
                                     "service": "Microsoft.KeyVault",
@@ -101,6 +120,9 @@
                         "name": "[parameters('huDBSubnetName')]",
                         "properties": {
                             "addressPrefix": "[parameters('hubDBSubnetAddressPrefix')]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('vnet_db_nsg'))]"
+                            },
                             "serviceEndpoints": [
                                 {
                                     "service": "Microsoft.KeyVault",
@@ -135,6 +157,9 @@
                         "name": "[parameters('hubStorageSubnetName')]",
                         "properties": {
                             "addressPrefix": "[parameters('hubStorageSubnetAddressPrefix')]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('vnet_storage_nsg'))]"
+                            },
                             "serviceEndpoints": [
                                 {
                                     "service": "Microsoft.KeyVault",
@@ -210,7 +235,13 @@
                         }
                     }
                 ]
-            }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('vnet_db_nsg')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('vnet_storage_nsg')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('vnet_databricks_nsg')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('vnet_jump_box_nsg')]"
+            ]
         }
     ]
 }
