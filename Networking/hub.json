@@ -210,8 +210,7 @@
                             "delegations": [],
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled"
-                        },
-                        "dependsOn": [ ]
+                        }
                     },
                     {
                         "name": "[parameters('hubDBricksPrivateSubnetName')]",
