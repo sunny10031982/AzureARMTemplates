@@ -1,0 +1,140 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sql_administratorLogin": {
+            "defaultValue": "mibiods",
+            "type": "string"
+        },
+        "sql_administratorLoginPassword": {
+            "type": "securestring"
+        },
+        "sql_databaseName": {
+            "defaultValue": "mibidb",
+            "type": "string"
+        },
+        "sql_tier": {
+            "defaultValue": "Standard",
+            "type": "string"
+        },
+        "sql_skuName": {
+            "defaultValue": "S6",
+            "type": "string"
+        },
+        "sql_serverName": {
+            "defaultValue": "mibiodssqlserver",
+            "type": "string"
+        }
+    },
+    "variables": {
+        "subscriptionId": "[subscription().subscriptionId]",
+        "resourceGroupName": "[resourceGroup().name]",
+        "uniqueStorage": "[uniqueString(variables('subscriptionId'), variables('resourceGroupName'), parameters(['resourceGroup().location'))]",
+        "storageName": "[tolower(concat('sqlva', variables('uniqueStorage')))]",
+        "sql_maxSizeBytes": "268435456000",
+        "sql_collation": "SQL_Latin1_General_CP1_CI_AS",
+        "enableVA": false
+        }
+
+    },
+    "resources": [
+        {
+            "apiVersion": "2016-01-01",
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[variables('storageName')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "Storage",
+            "properties": {}
+        },
+        {
+            "apiVersion": "2015-05-01-preview",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "application": "sql",
+                "project": "mibi"
+            },
+            "name": "[parameters('sql_serverName')]",
+            "properties": {
+                "administratorLogin": "[parameters('sql_administratorLogin')]",
+                "administratorLoginPassword": "[parameters('sql_administratorLoginPassword')]",
+                "version": "12.0"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2017-10-01-preview",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', parameters('sql_serverName'))]"
+                    ],
+                    "location": "[resourceGroup().location]",
+                    "tags": {
+                        "application": "sqldb",
+                        "project": "mibi"
+                    },
+                    "name": "[parameters('sql_databaseName')]",
+                    "properties": {
+                        "collation": "[variables('sql_collation')]",
+                        "maxSizeBytes": "[variables('sql_maxSizeBytes')]",
+                        "zoneRedundant": false
+                    },
+                    "sku": {
+                        "name": "[parameters('sql_skuName')]",
+                        "tier": "[parameters('sql_tier')]"
+                    },
+                    "type": "databases"
+                },
+                {
+                    "apiVersion": "2014-04-01-preview",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', parameters('sql_serverName'))]"
+                    ],
+                    "location": "[resourceGroup().location]",
+                    "name": "AllowAllWindowsAzureIps",
+                    "properties": {
+                        "endIpAddress": "0.0.0.0",
+                        "startIpAddress": "0.0.0.0"
+                    },
+                    "type": "firewallrules"
+                },
+                {
+                    "apiVersion": "2017-03-01-preview",
+                    "type": "securityAlertPolicies",
+                    "name": "Default",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', parameters('sql_serverName'))]",
+                        "[concat('Microsoft.Sql/servers/', parameters('sql_serverName'), '/databases/', parameters('sql_databaseName'))]"
+                    ],
+                    "properties": {
+                        "state": "Enabled",
+                        "disabledAlerts": [],
+                        "emailAddresses": [],
+                        "emailAccountAdmins": true
+                    }
+                },
+                {
+                    "condition": "[parameters('enableVA')]",
+                    "apiVersion": "2018-06-01-preview",
+                    "type": "vulnerabilityAssessments",
+                    "name": "Default",
+                    "properties": {
+                        "storageContainerPath": "[if(parameters('enableVA'), concat(reference(variables('storageName'), '2018-02-01').primaryEndpoints.blob, 'vulnerability-assessment'), '')]",
+                        "storageAccountAccessKey": "[if(parameters('enableVA'), listKeys(variables('storageName'), '2018-02-01').keys[0].value, '')]",
+                        "recurringScans": {
+                            "isEnabled": true,
+                            "emailSubscriptionAdmins": true,
+                            "emails": []
+                        }
+                    },
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', parameters('sql_serverName'))]",
+                        "[concat('Microsoft.Storage/storageAccounts/', variables('storageName'))]",
+                        "[concat('Microsoft.Sql/servers/', parameters('sql_serverName'), '/securityAlertPolicies/Default')]"
+                    ]
+                }
+            ],
+            "type": "Microsoft.Sql/servers"
+        }
+    ]
+}
