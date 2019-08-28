@@ -29,7 +29,8 @@
     "variables": {
         "subscriptionId": "[subscription().subscriptionId]",
         "resourceGroupName": "[resourceGroup().name]",
-        "uniqueStorage": "[uniqueString(variables('subscriptionId'), variables('resourceGroupName'), parameters('[resourceGroup().location]'))]",
+        "sql_location": "[resourceGroup().location]",
+        "uniqueStorage": "[uniqueString(variables('subscriptionId'), variables('resourceGroupName'), variables('sql_location'))]",
         "storageName": "[tolower(concat('sqlva', variables('uniqueStorage')))]",
         "sql_maxSizeBytes": "268435456000",
         "sql_collation": "SQL_Latin1_General_CP1_CI_AS",
