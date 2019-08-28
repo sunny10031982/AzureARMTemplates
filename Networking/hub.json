@@ -232,12 +232,7 @@
                         }
                     }
                 ]
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('vnet_storage_nsg'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('vnet_databricks_nsg'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('vnet_mgmt_jumpbox_nsg'))]"
-            ]
+            }
         }
     ]
 }
