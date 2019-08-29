@@ -158,6 +158,9 @@
             "apiVersion": "2019-04-01",
             "location": "[resourceGroup().location]",
             "kind": "StorageV2",
+            "identity": {
+                "type": "SystemAssigned"
+            },
             "properties": {
                 "supportsHttpsTrafficOnly": true,
                 "encryption": {
@@ -181,5 +184,6 @@
                 }
             }
         }
-    ]
+    ],
+    "outputs": {}
 }
