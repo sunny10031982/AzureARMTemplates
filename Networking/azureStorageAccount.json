@@ -34,6 +34,7 @@
             "type": "string",
             "defaultValue": "databricks-private-subnet"
         }
+
     },
     "variables": {
         "subscriptionId": "[subscription().subscriptionId]",
@@ -96,7 +97,7 @@
             },
             "kind": "StorageV2",
             "tags": {
-                "MIBI_Blobstorage": "mibiblobstorage1"
+                "MIBI_Blobstorage": "mibiblobstorage"
             }
         },
         {
@@ -150,7 +151,36 @@
             "properties": {
                 "publicAccess": "None"
             }
-        }
+        },
+        {
+            "name": "[parameters('dataLakeStorageAccName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-04-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "accessTier": "Hot",
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "keySource": "Microsoft.Storage",
+                    "services": {
+                        "blob": {
+                            "enabled": true
+                        },
+                        "file": {
+                            "enabled": true
+                        }
+                    },
+                    "isHnsEnabled": true
+                },
+                "dependsOn": [],
+                "sku": {
+                    "name": "Standard_RAGRS"
+                },
+                "kind": "StorageV2",
+                "tags": {
+                    "MIBI_DataLakeStore": "[parameters('dataLakeStorageAccName')]"
+                }
+            }
     ],
     "outputs": {}
 }
