@@ -157,8 +157,8 @@
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2019-04-01",
             "location": "[resourceGroup().location]",
+            "kind": "StorageV2",
             "properties": {
-                "accessTier": "Hot",
                 "supportsHttpsTrafficOnly": true,
                 "encryption": {
                     "keySource": "Microsoft.Storage",
@@ -176,11 +176,11 @@
                 "sku": {
                     "name": "Standard_RAGRS"
                 },
-                "kind": "StorageV2",
                 "tags": {
                     "MIBI_DataLakeStore": "[parameters('dataLakeStorageAccName')]"
                 }
             }
         }
-    ]
+    ],
+    "outputs": {}
 }
