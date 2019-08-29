@@ -148,7 +148,7 @@
                     {
                         "comments": "Adding existing VNET to the SQL Server",
                         "type": "Microsoft.Sql/servers/virtualNetworkRules",
-                        "name": "[concat(parameters('sqlServerName'), '/', 'db-subnet-rule')]",
+                        "name": "[concat(parameters('sql_serverName'), '/', 'db-subnet-rule')]",
                         "apiVersion": "2015-05-01-preview",
                         "scale": null,
                         "properties": {
