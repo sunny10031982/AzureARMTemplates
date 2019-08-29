@@ -156,7 +156,7 @@
                             "ignoreMissingVnetServiceEndpoint": "[parameters('ignoreMissingVnetServiceEndpoint')]"
                         },
                         "dependsOn": [
-                            "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+                            "[resourceId('Microsoft.Sql/servers', parameters('sql_serverName'))]"
                         ]
                     }
                 ],
