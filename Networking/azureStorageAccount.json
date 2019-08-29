@@ -192,17 +192,16 @@
                 "publicAccess": "None"
             }
         },
-        {
-            "name": "[parameters('dataLakeStorageAccName')]",
+		{
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "[variables('storageAccountApiVersion')]",
             "location": "[resourceGroup().location]",
+            "name": "[variables('dataLakeStorageAccName')]",
             "kind": "StorageV2",
-            "identity": {
-                "type": "SystemAssigned"
+            "sku": {
+                "name": "Standard_RAGRS"
             },
             "properties": {
-                "supportsHttpsTrafficOnly": true,
                 "encryption": {
                     "keySource": "Microsoft.Storage",
                     "services": {
@@ -212,16 +211,10 @@
                         "file": {
                             "enabled": true
                         }
-                    },
-                    "isHnsEnabled": true
+                    }
                 },
-                "dependsOn": [],
-                "sku": {
-                    "name": "Standard_RAGRS"
-                },
-                "tags": {
-                    "MIBI_DataLakeStore": "[parameters('dataLakeStorageAccName')]"
-                }
+                "isHnsEnabled": true,
+                "supportsHttpsTrafficOnly": true
             }
         }
     ],
