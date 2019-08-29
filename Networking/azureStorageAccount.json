@@ -163,6 +163,7 @@
             },
             "properties": {
                 "supportsHttpsTrafficOnly": true,
+                "accountType"="Standard_RAGRS",
                 "encryption": {
                     "keySource": "Microsoft.Storage",
                     "services": {
