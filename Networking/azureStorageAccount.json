@@ -196,7 +196,7 @@
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "[variables('storageAccountApiVersion')]",
             "location": "[resourceGroup().location]",
-            "name": "[variables('dataLakeStorageAccName')]",
+            "name": "[parameters('dataLakeStorageAccName')]",
             "kind": "StorageV2",
             "sku": {
                 "name": "Standard_RAGRS"
