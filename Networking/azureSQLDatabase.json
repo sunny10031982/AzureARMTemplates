@@ -146,17 +146,17 @@
                         ]
                     },
                     {
+                        "comments": "Adding existing VNET to the SQL Server",
                         "type": "Microsoft.Sql/servers/virtualNetworkRules",
+                        "name": "[concat(parameters('sqlServerName'), '/', 'db-subnet-rule')]",
                         "apiVersion": "2015-05-01-preview",
-                        "name": "[concat(parameters('sql_serverName'), '/db-subnet-rule')]",
+                        "scale": null,
                         "properties": {
-                            "virtualNetworkSubnetId": "[concat(variables('ipRuleVnet'), '/subnets/',variables('ipRuleVnet'))]",
-                            "ignoreMissingVnetServiceEndpoint": false
+                            "virtualNetworkSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), parameters('huDBSubnetName'))]",
+                            "ignoreMissingVnetServiceEndpoint": "[parameters('ignoreMissingVnetServiceEndpoint')]"
                         },
                         "dependsOn": [
-                            "[concat('Microsoft.Sql/servers/', parameters('sql_serverName'))]",
-                            "[concat('Microsoft.Storage/storageAccounts/', variables('storageName'))]",
-                            "[concat('Microsoft.Sql/servers/', parameters('sql_serverName'), '/securityAlertPolicies/Default')]"
+                            "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
                         ]
                     }
                 ],
