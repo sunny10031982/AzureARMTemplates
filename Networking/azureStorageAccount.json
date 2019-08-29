@@ -96,7 +96,7 @@
             },
             "kind": "StorageV2",
             "tags": {
-                "MIBI_Blobstorage": "mibiblobstorage"
+                "MIBI_Blobstorage": "mibiblobstorage1"
             }
         },
         {
