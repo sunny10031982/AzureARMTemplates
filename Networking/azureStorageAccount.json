@@ -38,6 +38,7 @@
     },
     "variables": {
         "subscriptionId": "[subscription().subscriptionId]",
+	"dataLakeStorageAccName": "[parameters('hubName')]",
         "storageAccountApiVersion": "[utils.apiVersion('Microsoft.Storage', 'storageAccounts')]",
         "resourceGroupName": "[resourceGroup().name]",
         "ipRuleVnet": "[concat('/subscriptions/', variables('subscriptionId'),'/resourceGroups/',variables('resourceGroupName'),'/providers/Microsoft.Network/virtualNetworks/',parameters('hubName'))]"
